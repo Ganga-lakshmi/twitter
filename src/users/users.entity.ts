@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Follow } from './following.entity';
 
-Entity();
+@Entity()
 export class Users {
   @PrimaryGeneratedColumn()
   id: number;
@@ -34,4 +36,10 @@ export class Users {
   })
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToMany(() => Follow, (follower) => follower.users)
+  follower: Follow[];
+
+  @OneToMany(() => Follow, (followee) => followee.user)
+  followee: Follow[];
 }
