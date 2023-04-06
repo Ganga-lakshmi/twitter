@@ -4,8 +4,10 @@ export enum RequiredPermission {
   Individual = 'Individual',
   Users = 'Users',
   Roles = 'Roles',
-  Customers = 'Customers',
-  Skills = 'Skills',
-  Resources = 'Resources',
-  Activity = 'Activity',
+  Posts = 'Posts',
+}
+
+export class LikingPost {
+  like = 'like';
+  unlike = 'unlike';
 }

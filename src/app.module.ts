@@ -7,6 +7,10 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-guard';
 import { RoleGuard } from './auth/guards/role-guard';
+import { Comments } from './posts/entities/comments.entity';
+import { Likes } from './posts/entities/likes.entity';
+import { Posts } from './posts/entities/posts.entity';
+import { PostsModule } from './posts/posts.module';
 import { Follow } from './users/following.entity';
 import { Users } from './users/users.entity';
 
@@ -26,12 +30,13 @@ import { UsersModule } from './users/users.module';
         username: configservice.get<string>('DB_USERNAME'),
         password: configservice.get<string>('DB_PASSWORD'),
         database: configservice.get<string>('DB_NAME'),
-        entities: [Users, Follow],
+        entities: [Users, Follow, Posts, Likes, Comments],
         synchronize: true,
       }),
     }),
     UsersModule,
     AuthModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [

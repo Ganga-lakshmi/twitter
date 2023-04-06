@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { RequiredPermission } from './../../utils/constants';
 //import { UserOrganizationRoleService } from 'src/user-organization-role/user-organization-role.service';
-import { RequiredPermission } from 'src/utils/constants';
 import { ROLES_KEY } from '../decorator/role.decorator';
 
 @Injectable()
@@ -16,12 +16,13 @@ export class RoleGuard implements CanActivate {
     >(ROLES_KEY, [context.getHandler(), context.getClass()]);
     const isPublic = requiredFeatures.includes(RequiredPermission.Guest);
     const isUsers = requiredFeatures.includes(RequiredPermission.Users);
+    const isPosts = requiredFeatures.includes(RequiredPermission.Posts);
     const request = context.switchToHttp().getRequest();
 
     if (isPublic) {
       return true;
     }
-    if (request.headers.authorization && isUsers) {
+    if ((request.headers.authorization && isUsers) || isPosts) {
       return true;
     }
 

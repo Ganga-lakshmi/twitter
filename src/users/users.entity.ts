@@ -1,3 +1,7 @@
+import { Comments } from 'src/posts/entities/comments.entity';
+import { Likes } from 'src/posts/entities/likes.entity';
+import { Posts } from 'src/posts/entities/posts.entity';
+
 import {
   Column,
   CreateDateColumn,
@@ -37,9 +41,21 @@ export class Users {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @OneToMany(() => Follow, (follower) => follower.users)
-  follower: Follow[];
+  @OneToMany(() => Follow, (follower) => follower.follower)
+  followed_by: Follow[];
 
-  @OneToMany(() => Follow, (followee) => followee.user)
-  followee: Follow[];
+  @OneToMany(() => Follow, (followee) => followee.followee)
+  followees: Follow[];
+
+  @OneToMany(() => Posts, (post) => post.created_by_user)
+  posts: Posts[];
+
+  @OneToMany(() => Likes, (likes) => likes.created_by_user)
+  likes: Likes[];
+
+  @OneToMany(() => Comments, (comment) => comment.created_by_user)
+  comments: Comments[];
+
+  // @ManyToOne(() => Follow, (fol) => fol.followee)
+  // user: Follow;
 }

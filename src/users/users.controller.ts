@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -9,13 +10,34 @@ import {
 } from '@nestjs/common';
 import { Features } from 'src/auth/decorator/role.decorator';
 import { UsersService } from 'src/users/users.service';
-import { RequiredPermission } from 'src/utils/constants';
+import { RequiredPermission } from './../utils/constants';
 import { UpdateUserDto } from './dto/createuser.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
+  @Features(RequiredPermission.Users)
+  @Get('/followers-list')
+  async followersCount(@Request() req) {
+    const followersCount = await this.userService.getFollowers(req.user.id);
+    return {
+      is_success: true,
+      message: 'Successfully fetched the followers',
+      followersCount,
+    };
+  }
+
+  @Features(RequiredPermission.Users)
+  @Get('/followee-list')
+  async followeeCount(@Request() req) {
+    const followees = await this.userService.getFollowees(req.user.id);
+    return {
+      is_success: true,
+      message: 'Successfully fetched followees',
+      followees,
+    };
+  }
   @Features(RequiredPermission.Users)
   @Get('/:id')
   async getUserById(@Param('id') id: number) {
@@ -46,8 +68,18 @@ export class UsersController {
 
   @Features(RequiredPermission.Users)
   @Post('/follow/:fid')
-  async followUser(@Request() req, @Param('pid') pid: number) {
+  async followUser(@Request() req, @Param('fid') pid: number) {
     const follower = await this.userService.createRelation(req.user.id, pid);
     return follower;
+  }
+
+  @Features(RequiredPermission.Users)
+  @Delete('/unfollow/:id')
+  async unfollowUser(@Request() req, @Param('id') id: number) {
+    const unfollow = await this.userService.unfollowUser(req.user.id, id);
+    return {
+      is_success: true,
+      message: 'Successfully unfollowed the user',
+    };
   }
 }
