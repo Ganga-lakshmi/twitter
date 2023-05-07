@@ -6,13 +6,15 @@ import {
   Param,
   Patch,
   Post,
-  Request,
+  Request
 } from '@nestjs/common';
-import { Features } from 'src/auth/decorator/role.decorator';
-import { UsersService } from 'src/users/users.service';
-import { RequiredPermission } from './../utils/constants';
-import { UpdateUserDto } from './dto/createuser.dto';
+import {ApiTags} from '@nestjs/swagger';
+import {Features} from 'src/auth/decorator/role.decorator';
+import {UsersService} from 'src/users/users.service';
+import {RequiredPermission} from './../utils/constants';
+import {UpdateUserDto} from './dto/createuser.dto';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
