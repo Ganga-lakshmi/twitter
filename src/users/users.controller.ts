@@ -8,14 +8,16 @@ import {
   Post,
   Request
 } from '@nestjs/common';
-import {ApiTags} from '@nestjs/swagger';
+import {ApiBearerAuth, ApiOkResponse, ApiTags} from '@nestjs/swagger';
 import {Features} from 'src/auth/decorator/role.decorator';
 import {UsersService} from 'src/users/users.service';
 import {RequiredPermission} from './../utils/constants';
 import {UpdateUserDto} from './dto/createuser.dto';
+import {GetUsersListSchema} from './response.schema';
 
 @ApiTags('users')
 @Controller('users')
+@ApiBearerAuth()
 export class UsersController {
   constructor(private userService: UsersService) {}
 
@@ -42,6 +44,11 @@ export class UsersController {
   }
   @Features(RequiredPermission.Users)
   @Get('/:id')
+  @ApiOkResponse({
+    status: 200,
+    description: 'Successfully Fetch Resources',
+    schema: GetUsersListSchema,
+  })
   async getUserById(@Param('id') id: number) {
     return await this.userService.findUserById(id);
   }

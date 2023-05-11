@@ -7,6 +7,8 @@ export const setupSwagger = (app: INestApplication) => {
     .setDescription('API documentation for the User module')
     .setVersion('1.0')
     .addTag('users')
+    .addBearerAuth(
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
